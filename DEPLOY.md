@@ -72,9 +72,11 @@ La primera vez pobla la BD con los 38 lugares de Cochabamba. Luego puedes poner 
 ## Paso 4 — Panel admin en Vercel
 
 1. Entra a [vercel.com](https://vercel.com) con GitHub.
-2. **Add New Project** → importa el repo.
-3. **Root Directory:** `app_web_admin`
-4. Variable de entorno:
+2. **Add New Project** → importa el repo `Illanes09/PS3-RUTA-CAFE`.
+3. **IMPORTANTE — Root Directory:** haz clic en **Edit** y selecciona `app_web_admin`.
+   - Si omites esto, Vercel despliega la raiz del monorepo (sin app frontend) y veras error **NOT_FOUND**.
+4. Framework Preset: **Vite** (auto-detectado).
+5. Variable de entorno:
 
 | Variable | Valor |
 |----------|-------|
@@ -106,6 +108,36 @@ Para cambiar datos en produccion:
 - Usa el panel admin en Vercel.
 - O conecta a MySQL de Railway con cualquier cliente (DBeaver, TablePlus).
 - O ejecuta SQL en Railway desde su consola.
+
+---
+
+## Solución de problemas
+
+### Error NOT_FOUND en Vercel
+
+| Causa | Solución |
+|-------|----------|
+| Root Directory no es `app_web_admin` | Settings → General → Root Directory → `app_web_admin` → Redeploy |
+| Visitas `/api/...` en la URL de Vercel | La API esta en **Render**, no en Vercel. Usa `VITE_API_URL=https://tu-api.onrender.com/api` |
+| Build fallido | Deployments → ultimo deploy → revisa **Build Logs** |
+| URL de deployment incorrecta | Usa la URL del proyecto en Vercel Dashboard, no una preview antigua |
+
+### Error Dockerfile not found en Render
+
+| Causa | Solución |
+|-------|----------|
+| Render usa **Docker** en la raiz del repo | Ya hay `Dockerfile` en la raiz. Haz **Redeploy** tras `git push`. |
+| Prefieres Node sin Docker | Settings → Runtime: **Node** → Root Directory: `BackendRutaCafe` → Build: `npm install` → Start: `node scripts/bootstrap-db.js && node index.js` |
+
+Variables MySQL Railway en Render:
+
+| Variable | Valor |
+|----------|-------|
+| `DB_HOST` | `kodama.proxy.rlwy.net` |
+| `DB_PORT` | `21299` |
+| `DB_USER` | `root` |
+| `DB_NAME` | `railway` |
+| `SEED_ON_START` | `false` |
 
 ---
 

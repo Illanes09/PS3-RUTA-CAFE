@@ -23,7 +23,7 @@ services:
       - key: DB_PASS
         sync: false
       - key: DB_NAME
-        value: rutadelcafebdd
+        value: railway
       - key: DB_PORT
         value: 3306
       - key: ADMIN_FRONTEND_URL

@@ -1,0 +1,8 @@
+node_modules
+**/node_modules
+.git
+AppMovil_RutaDelCafe
+app_web_admin
+**/.env
+**/.env.*
+render.env.local
