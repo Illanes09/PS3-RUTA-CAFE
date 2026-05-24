@@ -10,11 +10,13 @@ const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
-  database: process.env.DB_NAME,          // 👈 debe ser rutadelcafebdd según tu .env
+  database: process.env.DB_NAME,
   port: process.env.DB_PORT || 3306,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
+  connectTimeout: 15000,
+  ssl: process.env.DB_SSL === "true" ? { rejectUnauthorized: false } : undefined,
 });
 
 // Test de conexión + log útil

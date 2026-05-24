@@ -1,10 +1,24 @@
 #!/bin/sh
 set -e
 
+if [ -z "$DB_HOST" ] || [ -z "$DB_USER" ]; then
+  echo "❌ ERROR: Configura DB_HOST, DB_USER, DB_PASS, DB_NAME y DB_PORT en Render → Environment"
+  exit 1
+fi
+
 echo "Esperando MySQL en ${DB_HOST}:${DB_PORT:-3306}..."
 
+attempt=0
+max_attempts=30
+
 until node scripts/wait-for-db.js; do
-  sleep 2
+  attempt=$((attempt + 1))
+  if [ "$attempt" -ge "$max_attempts" ]; then
+    echo "❌ No se pudo conectar a MySQL tras ${max_attempts} intentos."
+    echo "   Verifica en Railway: Public Networking activo y credenciales correctas."
+    exit 1
+  fi
+  sleep 3
 done
 
 echo "MySQL disponible. Iniciando backend..."
