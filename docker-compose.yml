@@ -1,0 +1,71 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: rutacafe-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-rutadelcafebdd}
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  backend:
+    build:
+      context: ./BackendRutaCafe
+      dockerfile: Dockerfile
+    container_name: rutacafe-backend
+    restart: unless-stopped
+    environment:
+      PORT: 4000
+      DB_HOST: db
+      DB_USER: root
+      DB_PASS: ${MYSQL_ROOT_PASSWORD:-rootpass}
+      DB_NAME: ${MYSQL_DATABASE:-rutadelcafebdd}
+      DB_PORT: 3306
+      JWT_SECRET: ${JWT_SECRET:-supersecretkey}
+      ADMIN_FRONTEND_URL: ${ADMIN_FRONTEND_URL:-http://localhost:5173}
+    ports:
+      - "${BACKEND_PORT:-4000}:4000"
+    volumes:
+      - backend_uploads:/app/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./app_web_admin
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:4000/api}
+    container_name: rutacafe-frontend
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-5173}:80"
+    depends_on:
+      - backend
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: rutacafe-phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
+    ports:
+      - "${PHPMYADMIN_PORT:-8080}:80"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  mysql_data:
+  backend_uploads:

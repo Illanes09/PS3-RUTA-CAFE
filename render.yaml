@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: rutacafe-api
+    runtime: node
+    rootDir: BackendRutaCafe
+    plan: free
+    buildCommand: npm install
+    startCommand: node scripts/bootstrap-db.js && node index.js
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4000
+      - key: SEED_ON_START
+        value: true
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DB_HOST
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASS
+        sync: false
+      - key: DB_NAME
+        value: rutadelcafebdd
+      - key: DB_PORT
+        value: 3306
+      - key: ADMIN_FRONTEND_URL
+        sync: false
+      - key: CORS_ORIGIN
+        sync: false

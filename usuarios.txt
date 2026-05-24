@@ -1,0 +1,65 @@
+RUTA DEL CAFE - USUARIOS (Cochabamba, Bolivia)
+==============================================
+
+RESUMEN RAPIDO
+--------------
+Rol            | Email                              | Contraseña
+---------------|------------------------------------|------------------
+Administrador  | admin.rutacafe@rutadelsabor.bo     | AdminRuta2025!
+Tecnico        | tecnico.rutacafe@rutadelsabor.bo   | TecnicoRuta2025!
+Cliente        | cliente.rutacafe@rutadelsabor.bo   | ClienteRuta2025!
+Cliente        | maria.condori@rutadelsabor.bo       | MariaRuta2025!
+Tecnico        | carlos.aguilar@rutadelsabor.bo     | CarlosRuta2025!
+
+1. Administrador
+   Nombre:     Roberto Mendoza Quispe
+   Email:      admin.rutacafe@rutadelsabor.bo
+   Contraseña: AdminRuta2025!
+   Telefono:   +591 71456789
+   Ciudad:     Cochabamba
+   Rol:        Administrador (1)
+
+2. Tecnico
+   Nombre:     Elena Vargas Mamani
+   Email:      tecnico.rutacafe@rutadelsabor.bo
+   Contraseña: TecnicoRuta2025!
+   Telefono:   +591 71567890
+   Ciudad:     Cochabamba
+   Rol:        Tecnico (2)
+
+3. Cliente
+   Nombre:     Sofia Rios Flores
+   Email:      cliente.rutacafe@rutadelsabor.bo
+   Contraseña: ClienteRuta2025!
+   Telefono:   +591 71678901
+   Ciudad:     Cochabamba
+   Rol:        Usuario (3)
+
+4. Cliente
+   Nombre:     Maria Condori Apaza
+   Email:      maria.condori@rutadelsabor.bo
+   Contraseña: MariaRuta2025!
+   Telefono:   +591 71789012
+   Ciudad:     Cochabamba
+   Rol:        Usuario (3)
+
+5. Tecnico
+   Nombre:     Carlos Aguilar Soto
+   Email:      carlos.aguilar@rutadelsabor.bo
+   Contraseña: CarlosRuta2025!
+   Telefono:   +591 71890123
+   Ciudad:     Cochabamba
+   Rol:        Tecnico (2)
+
+DATOS DE EJEMPLO EN LA BD
+-------------------------
+- 5 ciudades (Cochabamba, La Paz, Santa Cruz, Quillacollo, Tiquipaya)
+- 8 rutas gastronomicas
+- 38 cafeterias y restaurantes (Cochabamba, Quillacollo, Tiquipaya)
+- Comentarios, likes, favoritos y publicidades de ejemplo
+
+URLs
+----
+API:         http://localhost:4000
+Panel admin: http://localhost:5173
+phpMyAdmin:  http://localhost:8080
