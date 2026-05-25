@@ -19,7 +19,7 @@ const Dashboard = () => {
 
       if (!token) throw new Error('No hay token de autenticación disponible');
 
-      const response = await fetch('http://localhost:4000/api/users/dashboard', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/users/dashboard`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
