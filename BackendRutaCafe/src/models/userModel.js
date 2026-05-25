@@ -301,9 +301,14 @@ export const createUser = async (userData) => {
     const has_fingerprint = !!fingerprint_data;
     let photoFilename = null;
 
-    // Procesar foto si existe
+    // Procesar foto si existe (no bloquear el registro si falla el guardado)
     if (photo) {
-      photoFilename = saveBase64Image(photo, `temp_${Date.now()}`);
+      try {
+        photoFilename = saveBase64Image(photo, `temp_${Date.now()}`);
+      } catch (photoErr) {
+        console.warn("⚠️ No se pudo guardar la foto en registro; usuario se crea sin foto:", photoErr.message);
+        photoFilename = null;
+      }
     }
 
     const [result] = await connection.query(
@@ -315,19 +320,22 @@ export const createUser = async (userData) => {
 
     // Si hay foto, renombrar con el ID real del usuario
     if (photo && photoFilename) {
-      const newPhotoFilename = `user_${userId}_${Date.now()}.jpg`;
-      const oldFullPath = path.join(usersPhotosDir, photoFilename);
-      const newFullPath = path.join(usersPhotosDir, newPhotoFilename);
+      try {
+        const newPhotoFilename = `user_${userId}_${Date.now()}.jpg`;
+        const oldFullPath = path.join(usersPhotosDir, photoFilename);
+        const newFullPath = path.join(usersPhotosDir, newPhotoFilename);
 
-      if (fs.existsSync(oldFullPath)) {
-        fs.renameSync(oldFullPath, newFullPath);
-        photoFilename = newPhotoFilename;
+        if (fs.existsSync(oldFullPath)) {
+          fs.renameSync(oldFullPath, newFullPath);
+          photoFilename = newPhotoFilename;
 
-        // Actualizar la ruta en la base de datos
-        await connection.query(
-          "UPDATE users SET photo = ? WHERE id = ?",
-          [photoFilename, userId]
-        );
+          await connection.query(
+            "UPDATE users SET photo = ? WHERE id = ?",
+            [photoFilename, userId]
+          );
+        }
+      } catch (renameErr) {
+        console.warn("⚠️ Foto guardada parcialmente para usuario", userId, renameErr.message);
       }
     }
 

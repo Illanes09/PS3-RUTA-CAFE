@@ -19,6 +19,7 @@ import {
   View,
 } from "react-native";
 import * as Animatable from "react-native-animatable";
+import { API_BASE, API_URL, isCloudApi } from "../constants/api";
 import { useThemedStyles } from "../hooks/useThemedStyles";
 import { useTheme } from "../hooks/theme-context";
 
@@ -164,7 +165,7 @@ export default function RegisterScreen() {
     
     try {
       setEmailChecking(true);
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/auth/check-email`, {
+      const response = await fetch(`${API_URL}/auth/check-email`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
@@ -177,11 +178,15 @@ export default function RegisterScreen() {
       return false;
     } catch (error) {
       console.error("Error checking email:", error);
-      return false;
+      throw new Error("NETWORK");
     } finally {
       setEmailChecking(false);
     }
   };
+
+  useEffect(() => {
+    console.log(`📡 API registro: ${API_BASE} (${isCloudApi ? "nube" : "local"})`);
+  }, []);
 
   useEffect(() => {
     try {
@@ -529,9 +534,18 @@ export default function RegisterScreen() {
 
       // Verificar email duplicado
       if (formData.email) {
-        const emailExists = await checkEmailExists(formData.email);
-        if (emailExists) {
-          setErrorMessage("❌ Este correo electrónico ya está registrado");
+        try {
+          const emailExists = await checkEmailExists(formData.email);
+          if (emailExists) {
+            setErrorMessage("❌ Este correo electrónico ya está registrado");
+            return;
+          }
+        } catch {
+          setErrorMessage(
+            isCloudApi
+              ? "❌ No hay conexión con el servidor. Verifique su internet e intente de nuevo."
+              : `❌ No se alcanza el servidor (${API_BASE}). Use: npm run start:cloud`
+          );
           return;
         }
       }
@@ -557,7 +571,7 @@ export default function RegisterScreen() {
         submitData.photo = formData.photo;
       }
 
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/auth/register`, {
+      const response = await fetch(`${API_URL}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(submitData),
@@ -619,8 +633,14 @@ export default function RegisterScreen() {
           errorMsg = "❌ Error interno del servidor. Intente más tarde.";
         } else if (error.message.includes("Data too long") || error.message.includes("image") || error.message.includes("photo")) {
           errorMsg = "❌ La imagen es demasiado grande. Intenta con una imagen más pequeña.";
-        } else if (error.message.includes("Network request failed") || error.message.includes("fetch")) {
-          errorMsg = "❌ Error de conexión. Verifique su internet.";
+        } else if (
+          error.message.includes("Network request failed") ||
+          error.message.includes("fetch") ||
+          error.message === "NETWORK"
+        ) {
+          errorMsg = isCloudApi
+            ? "❌ Error de conexión. Verifique su internet."
+            : `❌ La app apunta a tu PC (${API_BASE}), no a la nube. En la PC ejecute: npm run start:cloud y vuelva a escanear el QR.`;
         } else {
           errorMsg = `❌ ${error.message}`;
         }
