@@ -1,22 +1,20 @@
 // src/config/db.js
 import mysql from "mysql2/promise";
 import dotenv from "dotenv";
+import { getMysqlConnectionOptions, logMysqlTarget } from "./mysqlOptions.js";
 
 dotenv.config();
 
 export const SCHEMA = process.env.DB_NAME; // 👈 lo usamos para calificar tablas
 
+logMysqlTarget();
+
 const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
+  ...getMysqlConnectionOptions(),
   database: process.env.DB_NAME,
-  port: process.env.DB_PORT || 3306,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-  connectTimeout: 15000,
-  ssl: process.env.DB_SSL === "true" ? { rejectUnauthorized: false } : undefined,
 });
 
 // Test de conexión + log útil

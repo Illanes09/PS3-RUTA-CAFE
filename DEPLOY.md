@@ -137,7 +137,17 @@ Variables MySQL Railway en Render:
 | `DB_PORT` | `21299` |
 | `DB_USER` | `root` |
 | `DB_NAME` | `railway` |
+| `DB_SSL` | `true` |
 | `SEED_ON_START` | `false` |
+
+### Render: "MySQL no disponible" / "Connection lost" / "No open HTTP ports"
+
+1. En **Railway** → tu servicio MySQL → debe estar **Running** (no Paused).
+2. **Settings** → activa **Public Networking** (o copia de nuevo el host/puerto en Connect).
+3. En **Render** → Environment, `DB_PORT` debe ser el **puerto público** (ej. `21299`), **no** `3306`.
+4. `DB_PASS` debe coincidir exactamente con la contraseña actual de Railway (si la rotaste, actualízala en Render).
+5. Añade `DB_SSL=true` (el código también activa SSL automático si el host termina en `rlwy.net`).
+6. Guarda variables → **Manual Deploy** → espera 2–3 min y prueba `https://ps3-ruta-cafe-1.onrender.com/`.
 
 ---
 

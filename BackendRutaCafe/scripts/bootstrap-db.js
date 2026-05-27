@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import mysql from "mysql2/promise";
+import { getMysqlConnectionOptions, logMysqlTarget } from "../src/config/mysqlOptions.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const seedPath = path.join(__dirname, "..", "database", "production-seed.sql");
@@ -17,11 +18,10 @@ const run = async () => {
     return;
   }
 
+  logMysqlTarget();
+
   const connection = await mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    port: Number(process.env.DB_PORT || 3306),
+    ...getMysqlConnectionOptions(),
     multipleStatements: true,
   });
 
