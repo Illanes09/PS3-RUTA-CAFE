@@ -51,8 +51,7 @@ jobs:
       - name: Build release APK
         run: |
           cd android
-          chmod +x gradlew
-          ./gradlew assembleRelease --no-daemon -x lint
+          bash ./gradlew assembleRelease --no-daemon -x lint
 
       - name: Copy APK to releases/
         run: |
