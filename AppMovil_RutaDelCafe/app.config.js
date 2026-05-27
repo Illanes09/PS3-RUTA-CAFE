@@ -3,6 +3,15 @@ const os = require('os');
 
 // Hook que se ejecuta ANTES de expo start
 function preExportHook(config) {
+  const envPath = '.env.local';
+  if (fs.existsSync(envPath)) {
+    const current = fs.readFileSync(envPath, 'utf8');
+    if (current.includes('https://')) {
+      console.log('☁️ Usando API en la nube (.env.local)');
+      return config;
+    }
+  }
+
   console.log('🔄 Actualizando IP automáticamente...');
   
   // Detectar IP del WiFi

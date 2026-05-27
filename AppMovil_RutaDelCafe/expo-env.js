@@ -35,6 +35,14 @@ function getWiFiIP() {
 
 // Actualizar el archivo .env.local
 function updateEnvFile() {
+  if (fs.existsSync('.env.local')) {
+    const current = fs.readFileSync('.env.local', 'utf8');
+    if (current.includes('https://')) {
+      console.log('☁️ Manteniendo API en la nube');
+      return;
+    }
+  }
+
   const wifiIP = getWiFiIP();
   
   const envContent = `# Archivo generado automáticamente - IP del WiFi detectada

@@ -58,8 +58,24 @@ DATOS DE EJEMPLO EN LA BD
 - 38 cafeterias y restaurantes (Cochabamba, Quillacollo, Tiquipaya)
 - Comentarios, likes, favoritos y publicidades de ejemplo
 
-URLs
-----
-API:         http://localhost:4000
-Panel admin: http://localhost:5173
-phpMyAdmin:  http://localhost:8080
+URLs PRODUCCION
+---------------
+API:         https://ps3-ruta-cafe-1.onrender.com
+Panel admin: https://ps3-ruta-cafe-admin.vercel.app
+
+RAILWAY MySQL (Render → Environment)
+------------------------------------
+DB_HOST=zephyr.proxy.rlwy.net
+DB_PORT=11861
+DB_USER=root
+DB_NAME=railway
+DB_SSL=true
+DB_PASS=(copiar de Railway → Variables → MYSQL_ROOT_PASSWORD)
+SEED_ON_START=false   (ya poblada: 5 usuarios, 38 lugares)
+
+APP MOVIL (Expo)
+----------------
+cd AppMovil_RutaDelCafe
+npm run start:cloud
+
+Login cliente: cliente.rutacafe@rutadelsabor.bo / ClienteRuta2025!

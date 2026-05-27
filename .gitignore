@@ -71,5 +71,8 @@ Thumbs.db
 .nyc_output/
 jest-html-reporters-*
 
+# APK en releases/ (se sube a git a propósito)
+# releases/*.apk  — no ignorar
+
 # Misc
 *.tgz
